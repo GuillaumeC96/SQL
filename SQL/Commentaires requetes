@@ -1,0 +1,37 @@
+//Joindre les tables Employes et Departmeent avec la méthode JOIN
+
+SELECT
+  *
+FROM Employes
+JOIN Departements ON Employes.emp_dep=Departements.dep_id;
+
+//Parmis la table précédente, faire la somme des salaires de plus de 2000 euros pour chaque département
+SELECT
+  *,SUM(emp_salaire)
+FROM Employes
+JOIN Departements ON Employes.emp_dep=Departements.dep_id
+WHERE emp_salaire>2000
+GROUP BY dep_id
+
+//Parmis la table précédente, filtrer les lignes dont la somme départementale est supérieure à 4000
+SELECT
+  *,SUM(emp_salaire)
+FROM Employes
+JOIN Departements ON Employes.emp_dep=Departements.dep_id
+WHERE emp_salaire>2000
+GROUP BY dep_id
+HAVING SUM(emp_salaire)>4000
+
+//Trier par la somme départementale dansq l'ordre décroissant et sélectionner les 3 plus grands
+
+SELECT
+  *,SUM(emp_salaire)
+FROM Employes
+JOIN Departements ON Employes.emp_dep=Departements.dep_id
+WHERE emp_salaire>2000
+GROUP BY dep_id
+HAVING SUM(emp_salaire)>4000
+ORDER BY -SUM(emp_salaire)
+LIMIT 3
+
+Cela donne le top 3 des département qui ont une somme de salaires supérieurs à 2000 euros
