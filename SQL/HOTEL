@@ -116,13 +116,6 @@ GROUP BY sta_nom
 
 /*16 - Afficher la liste des hôtels pour lesquels Mr Squire a effectué une réservation*/
 
-SELECT hot_nom
-FROM hotel
-JOIN chambre ON hotel.hot_id=chambre.cha_id
-JOIN reservation ON chambre.cha_id=reservation.res_cha_id
-
-/*17 - Afficher la durée moyenne des réservations par station*/
-
 SELECT cli_nom,hot_nom
 FROM hotel
 JOIN chambre ON hotel.hot_id=chambre.cha_id
@@ -130,3 +123,11 @@ JOIN reservation ON chambre.cha_id=reservation.res_cha_id
 JOIN client ON reservation.res_cli_id=client.cli_id
 WHERE cli_nom="Squire"
 
+/*17 - Afficher la durée moyenne des réservations par station*/
+
+SELECT sta_nom, AVG(ABS(DATEDIFF(res_date_debut,res_date_fin)))
+FROM station
+JOIN hotel ON station.sta_id = hotel.hot_sta_id
+JOIN chambre ON hotel.hot_id = chambre.cha_hot_id
+JOIN reservation ON chambre.cha_hot_id = reservation.res_cha_id
+GROUP BY sta_id
