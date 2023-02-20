@@ -88,8 +88,45 @@ JOIN client ON reservation.res_cli_id=client.cli_id
 JOIN chambre ON reservation.res_cha_id=chambre.cha_id
 JOIN hotel ON chambre.cha_hot_id=hotel.hot_id
 
+/*Lot 3 : fonctions d'agrégation*/
 
+/*13 - Compter le nombre d’hôtel par station*/
 
+SELECT sta_nom, COUNT(hot_nom)
+FROM station
+JOIN hotel ON station.sta_id=hotel.hot_sta_id
+GROUP BY sta_nom
 
+/*14 - Compter le nombre de chambres par station*/
 
+SELECT sta_nom, COUNT(cha_numero)
+FROM station
+JOIN hotel ON station.sta_id=hotel.hot_sta_id
+JOIN chambre ON hotel.hot_id=chambre.cha_hot_id
+GROUP BY sta_nom
+
+/*15 - Compter le nombre de chambres par station ayant une capacité > 1*/
+
+SELECT sta_nom, COUNT(cha_numero)
+FROM station
+JOIN hotel ON station.sta_id=hotel.hot_sta_id
+JOIN chambre ON hotel.hot_id=chambre.cha_hot_id
+WHERE cha_capacite>1
+GROUP BY sta_nom
+
+/*16 - Afficher la liste des hôtels pour lesquels Mr Squire a effectué une réservation*/
+
+SELECT hot_nom
+FROM hotel
+JOIN chambre ON hotel.hot_id=chambre.cha_id
+JOIN reservation ON chambre.cha_id=reservation.res_cha_id
+
+/*17 - Afficher la durée moyenne des réservations par station*/
+
+SELECT cli_nom,hot_nom
+FROM hotel
+JOIN chambre ON hotel.hot_id=chambre.cha_id
+JOIN reservation ON chambre.cha_id=reservation.res_cha_id
+JOIN client ON reservation.res_cli_id=client.cli_id
+WHERE cli_nom="Squire"
 
