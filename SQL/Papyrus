@@ -1,0 +1,21 @@
+/*1.Quelles sont les commandes du fournisseur n°9120 ?*/
+
+SELECT *
+FROM entcom
+WHERE numfou=9120
+
+/*2.Afficher le code des fournisseurs pour lesquels des commandes ont été passées.*/
+
+SELECT numfou
+FROM entcom
+GROUP BY numfou
+
+/*3.Afficher le nombre de commandes fournisseurs passées, et le nombre de fournisseur concernés.*/
+
+
+
+/*4.Extraire les produits ayant un stock inférieur ou égal au stock d'alerte, et dont la quantité annuelle est inférieure à 1000. */
+
+SELECT codart, libart, stkale, stkphy, qteann
+FROM produit
+WHERE stkale <= stkphy AND qteann<1000
