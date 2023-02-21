@@ -59,7 +59,7 @@ HAVING SUM(qtecde*priuni)>10000
 
 /*10.Lister les commandes par nom de fournisseur.*/
 
-SELECT fournis.nomfou, numcom, datecom
+SELECT fournis.nomfou, numcom
 FROM entcom
 JOIN fournis ON entcom.numfou = fournis.numfou
 
@@ -78,12 +78,29 @@ JOIN fournis ON entcom.numfou = fournis.numfou
 GROUP BY nomfou
 HAVING sum(qteliv) > 1
 
-/*version 2*/
+/*13.Coder de 2 manières différentes la requête suivante : Lister les commandes dont le fournisseur est celui de la commande n°70210.*/
 
-SELECT nomfou,sum(qteliv)
+SELECT *
 FROM entcom
-JOIN ligcom ON entcom.numcom = ligcom.numcom
-JOIN fournis ON entcom.numfou = fournis.numfou
-GROUP BY nomfou
-HAVING sum(qteliv) > 1
+WHERE numfou IN ( 
 
+    SELECT numfou
+    FROM entcom
+    WHERE numcom = 70210
+
+)
+
+/*14.Dans les articles susceptibles d’être vendus, lister les articles moins chers (basés sur Prix1) que le moins cher des rubans (article dont le premier caractère commence par R). */
+
+SELECT *
+FROM produit
+JOIN vente ON produit.codart = vente.codart
+
+WHERE prix1 < (
+
+    SELECT MIN(prix1)
+    FROM produit
+    JOIN vente ON produit.codart = vente.codart
+    WHERE LOCATE("ruban",libart)>0
+    
+)
