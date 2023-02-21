@@ -12,10 +12,78 @@ GROUP BY numfou
 
 /*3.Afficher le nombre de commandes fournisseurs passées, et le nombre de fournisseur concernés.*/
 
+SELECT COUNT(numcom), COUNT(DISTINCT(numfou))
+FROM entcom
 
-
-/*4.Extraire les produits ayant un stock inférieur ou égal au stock d'alerte, et dont la quantité annuelle est inférieure à 1000. */
+/*4.Extraire les produits ayant un stock inférieur ou égal au stock d'alerte, et dont la quantité annuelle est inférieure à 1000.*/
 
 SELECT codart, libart, stkale, stkphy, qteann
 FROM produit
 WHERE stkale <= stkphy AND qteann<1000
+
+/*5.Quels sont les fournisseurs situés dans les départements 75, 78, 92, 77 ?*/
+
+SELECT nomfou,convert(substring(posfou,1,2),INT)
+FROM fournis
+WHERE substring(posfou,1,2)="75" OR substring(posfou,1,2)="78" OR substring(posfou,1,2)="92" OR substring(posfou,1,2)="77"
+ORDER BY convert(substring(posfou,1,2),INT) DESC, nomfou ASC
+
+/*6.Quelles sont les commandes passées en mars et en avril ?*/
+
+SELECT *
+FROM entcom
+WHERE  MONTH(datcom)=3 OR MONTH(datcom)=4
+
+/*7.Quelles sont les commandes du jour qui ont des observations particulières ?*/
+
+SELECT *
+FROM entcom
+WHERE obscom != ""
+
+/*8.Lister le total de chaque commande par total décroissant.*/
+
+SELECT entcom.numcom, SUM(priuni)
+FROM entcom
+JOIN ligcom ON entcom.numcom = ligcom.numcom
+GROUP BY entcom.numcom
+ORDER BY -SUM(priuni)
+
+/*9.Lister les commandes dont le total est supérieur à 10000€ ; on exclura dans le calcul du total les articles commandés en quantité supérieure ou égale à 1000. */
+
+SELECT *, SUM(qtecde*priuni)
+FROM entcom
+JOIN ligcom ON entcom.numcom = ligcom.numcom
+WHERE qtecde<1000
+GROUP BY entcom.numcom
+HAVING SUM(qtecde*priuni)>10000
+
+/*10.Lister les commandes par nom de fournisseur.*/
+
+SELECT fournis.nomfou, numcom
+FROM entcom
+JOIN fournis ON entcom.numfou = fournis.numfou
+
+/*11.Sortir les produits des commandes ayant le mot "urgent' en observation.*/
+
+SELECT *
+FROM entcom
+WHERE LOCATE("urgent",obscom)>0
+
+/*12.Coder de 2 manières différentes la requête suivante : Lister le nom des fournisseurs susceptibles de livrer au moins un article.*/
+
+SELECT nomfou,sum(qteliv)
+FROM entcom
+JOIN ligcom ON entcom.numcom = ligcom.numcom
+JOIN fournis ON entcom.numfou = fournis.numfou
+GROUP BY nomfou
+HAVING sum(qteliv) > 1
+
+/*version 2*/
+
+SELECT nomfou,sum(qteliv)
+FROM entcom
+JOIN ligcom ON entcom.numcom = ligcom.numcom
+JOIN fournis ON entcom.numfou = fournis.numfou
+GROUP BY nomfou
+HAVING sum(qteliv) > 1
+
