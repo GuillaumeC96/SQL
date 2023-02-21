@@ -59,7 +59,7 @@ HAVING SUM(qtecde*priuni)>10000
 
 /*10.Lister les commandes par nom de fournisseur.*/
 
-SELECT fournis.nomfou, numcom
+SELECT fournis.nomfou, numcom, datecom
 FROM entcom
 JOIN fournis ON entcom.numfou = fournis.numfou
 
